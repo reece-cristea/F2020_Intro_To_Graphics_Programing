@@ -101,5 +101,7 @@ floatv vec3sum(float3 v_sum, float3 const v_lh, float3 const v_rh);	// get sum o
 // DB: include inline definitions for this interface
 #include "_inl/gproVector.inl"
 
+using point3 = vec3;
+using color = vec3;
 
 #endif	// !_GPRO_VECTOR_H_

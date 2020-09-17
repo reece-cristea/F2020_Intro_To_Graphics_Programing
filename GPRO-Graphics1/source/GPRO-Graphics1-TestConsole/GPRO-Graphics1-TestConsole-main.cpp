@@ -28,6 +28,8 @@
 
 
 #include "gpro/gpro-math/gproVector.h"
+#include "gpro/gpro-math/color.h"
+#include <iostream>
 
 
 void testVector()
@@ -56,6 +58,23 @@ void testVector()
 int main(int const argc, char const* const argv[])
 {
 	testVector();
+
+	//the image itself
+	const int image_width = 64;
+	const int image_height = 64;
+
+	//rendering the image
+
+	std::cout << "Image\n" << image_width << ' ' << image_height << "\n63\n";
+
+	for (int i = image_height - 1; i >= 0; i--)
+	{
+		for (int j = 0; j < image_width; j++)
+		{
+			color pixel_color(float(i) / (image_width - 1), float(j) / (image_height - 1), 0.25);
+			write_color(std::cout, pixel_color);
+		}
+	}
 
 	printf("\n\n");
 	system("pause");
