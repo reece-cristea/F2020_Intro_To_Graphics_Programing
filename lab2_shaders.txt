@@ -1,0 +1,114 @@
+
+
+vec4 myEffect0(in vec2 fragCoord, in vec2 resolution)
+{
+    //red
+    //return vec4(1.0,0,0,1.0);
+    
+    // R is horizontal coord
+    // G is vertical coord
+    // B is ?
+    // A is ?
+    //return vec4(fragCoord,0,1.0);
+    
+    
+    
+    //gradient
+    vec2 uv = fragCoord/resolution;
+    
+    vec3 color = vec3(uv, 0.25);
+    float alpha = 1.0;
+    
+    return vec4(color,alpha);
+
+}
+
+//checker
+vec4 myEffect1(in vec2 uv)
+{
+    float Size = 2.0;
+    vec2 Pos = floor(uv / Size);
+    float pattern = mod(Pos.x + mod(Pos.y, 2.0), 2.0);
+    return pattern * vec4(1.0, 1.0, 1.0, 1.0);
+}
+
+//circle
+float myEffect2(vec2 uv, vec2 center, float radius)
+{
+    //define how sharp the circle is, the higher the number the more blurry the circle is
+    float smoothness = 5.0 / iResolution.x;
+    //calculate position of circle
+    float dist = distance(uv, center);
+    //create circle shape
+    float col = smoothstep(radius, radius + smoothness, dist);
+    
+    return 1.0 - col;
+}
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{   
+    // Normalized pixel coordinates (from 0 to 1)
+  	vec2 uv = fragCoord / iResolution.xy;
+    uv.x *= iResolution.x / iResolution.y;
+    
+    
+    // Time varying pixel color
+    vec3 col = 0.1 + 0.3*cos(iTime+uv.xyx+vec3(0,2,4));
+    vec3 col2 = 0.1 + 0.9*cos(iTime+uv.xyx+vec3(0,2,4));
+    
+    /*
+	//gradient
+	fragColor = myEffect0(fragCoord, iResolution.xy);
+	*/
+    
+    /*
+	//checker
+    fragColor = myEffect1(fragCoord);
+    */
+    
+    /*
+	//circle
+	float radius = abs(sin(iTime)) * 0.25 + 0.05;
+	float circleCover = myEffect2(uv, vec2(0.875, 0.5), radius);
+	vec4 circleColor = vec4(col,1.0);
+    
+    fragColor = vec4(col2, 1.0);
+    fragColor = mix(fragColor, circleColor, circleCover);
+	*/
+	
+    /*
+	//psychedelic
+	float radius = abs(sin(iTime * 10.0)) * 0.25 + 0.05;
+    float radius2 = abs(sin(iTime)) * 0.25 + 0.05;
+    float radius3 = abs(sin(iTime * 3.0)) * 0.25 + 0.05;
+    float circleCover = myEffect2(uv, vec2(1.0, 0.5), radius);
+    float circleCover2 = myEffect2(uv, vec2(0.75, 0.5), radius);
+    float circleCover3 = myEffect2(uv, vec2(0.875, 0.35), radius2);
+    float circleCover4 = myEffect2(uv, vec2(0.875, 0.65), radius2);
+    float circleCover5 = myEffect2(uv, vec2(1.2, 0.75), radius3);
+    float circleCover6 = myEffect2(uv, vec2(0.55, 0.75), radius3);
+    float circleCover7 = myEffect2(uv, vec2(1.2, 0.25), radius3);
+    float circleCover8 = myEffect2(uv, vec2(0.55, 0.25), radius3);
+    vec4 circleColor = vec4(col,1.0);
+
+	fragColor = myEffect1(fragCoord);
+	fragColor = mix(fragColor, circleColor, circleCover);
+    fragColor = mix(fragColor, circleColor, circleCover2);
+    fragColor = mix(fragColor, circleColor, circleCover3);
+    fragColor = mix(fragColor, circleColor, circleCover4);
+    fragColor = mix(fragColor, circleColor, circleCover5);
+    fragColor = mix(fragColor, circleColor, circleCover6);
+    fragColor = mix(fragColor, circleColor, circleCover7);
+    fragColor = mix(fragColor, circleColor, circleCover8);
+	*/
+   
+}
+
+
+
+
+
+/*
+Notes:
+frament shader - output a color or single fragment
+*/
