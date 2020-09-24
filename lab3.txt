@@ -1,4 +1,3 @@
-
 // calcViewport: calculate the viewing plane (viewport) coordinate
 //    viewport:       output viewing plane coordinate
 //    ndc:            output normalized device coordinate
@@ -47,7 +46,9 @@ void calcRay(out vec4 rayDirection, out vec4 rayOrigin,
 
 float hit_sphere(in vec4 center, float radius, in vec4 rayDirection, in vec4 rayOrigin)
 {
+    //calculate direction of ray from center to pixel
     vec4 oc = rayDirection - center;
+    //calculate t
     float a = dot(rayDirection, rayDirection);
     float b = 2.0 * dot(oc, rayDirection);
     float c = dot(oc, oc) - radius*radius;
@@ -68,14 +69,18 @@ float hit_sphere(in vec4 center, float radius, in vec4 rayDirection, in vec4 ray
 vec4 calcColor(in vec4 rayDirection, in vec4 rayOrigin)
 {
 	//BONUS: animate circle by changing radius over time
+    //determine position of the ray
     float t = hit_sphere(vec4(0,0,-1,0), (abs(cos(iTime)) * 0.25 + 0.3), rayDirection, rayOrigin);
-        if ( t > -1.0)
+    //if t is greater than -1, it is in circle
+    if ( t > -1.0)
         {
+        //fill im circle with color
         vec4 r = ((1.0 + t)*rayDirection) - vec4(0,0,-1,0);
         float len1 = length(r);
         vec4 N = r / len1;
         return 0.5*vec4(N.x+1.0,N.y+1.0,N.z+1.0,1.0);
         }
+    //find unit vector of rayDirection
     float len2 = length(rayDirection);
     vec4 unit_direction = rayDirection / len2;
    	t = 0.5*(unit_direction.y + 1.0);
