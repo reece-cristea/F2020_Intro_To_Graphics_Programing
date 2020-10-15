@@ -1,0 +1,17 @@
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    vec4 tex = texture(iChannel0, fragCoord.xy/iChannelResolution[0].xy);
+    vec3 luminate = vec3(0.4126, 0.7152, 0.5722);
+    
+    float luminance = dot(luminate, tex.rgb);
+    
+    tex.rgb *= luminance;
+    tex.a = 1.0;
+    if (tex.r < 1.5)
+    {
+        tex.rgb -= 0.46;
+    }
+    
+    fragColor = tex;
+   
+}
