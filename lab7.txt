@@ -1,0 +1,60 @@
+VS
+------------------------------------------------
+#version 300 es
+
+layout (location = 0) in vec4 aPosition;
+layout (location = 1) in vec3 aNormal;
+
+layout (location = 2) in vec4 aTexcoord;
+
+uniform mat4 uModelMat;
+uniform mat4 uViewMat;
+uniform mat4 uProjMat;
+uniform mat4 uViewProjlMat;
+
+out vec4 vNormal;
+out vec4 vTexcoord;
+
+void main()
+{
+	mat4 modelViewMat = uViewMat * uModelMat;
+	vec4 pos_camera = modelViewMat *aPosition;
+	vec4 pos_clip = uProjMat * pos_camera;
+	gl_Position = pos_clip;
+	
+	mat3 normalMat = transpose(inverse(mat3(modelViewMat)));
+	vec3 norm_camera = normalMat * aNormal;
+	
+	//TEXCOORD PIPELINE
+	mat4 atlasMat = mat4(0.5, 0.0, 0.0, 0.0,
+						 0.0, 0.5, 0.0, 0.0,
+						 0.0, 0.0, 1.0, 0.0,
+						 0.25, 0.25, 0.0, 1.0);
+	vec4 uv_atlas = atlasMat * aTexcoord;
+	
+	vNormal = vec4(norm_camera, 0.0);
+	
+	vTexcoord = aTexcoord;
+	
+}
+
+
+
+PS
+-------------------------------------------------
+#version 300 es
+
+#ifdef GL_ES
+precision highp float;
+#endif
+
+layout (location = 0) out vec4 rtFragColor;
+
+in vec4 vNormal;
+in vec2 vTexCoord;
+
+void main()
+{
+	vec4 N = normalize(vNormal);
+	rtFragColor = vec4(N.xyz * 0.5 + 0.5, 1.0);
+}
