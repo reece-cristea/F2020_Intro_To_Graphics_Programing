@@ -1,3 +1,5 @@
+//https://www.shadertoy.com/view/ltScRG
+
 const int kernalSamples = 25,
           detail = 1,         
           tileSize = 1 << detail;
